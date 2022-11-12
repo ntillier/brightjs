@@ -1,5 +1,12 @@
-const brightJs = (function(){
+
+const brightJs = (function() {
     "use strict";
+    var __custom__ = { extend, custom, setOptions };
+    var __options__ = {
+        cloneWhenAppend: true,
+        queryRoot: document,
+        queryFunction: 'querySelectorAll'
+    };
 
     function getIndex (d) {
         return Array.from(d.parentElement.children).indexOf(d);
@@ -8,7 +15,7 @@ const brightJs = (function(){
     function parseHTML (...str) {
         const parent = document.createElement('div');
         parent.innerHTML = str.join('');
-        return new BrightJs(...parent.children);
+        return parent.children;
     }
 
     function extend (a, b) {
@@ -19,6 +26,10 @@ const brightJs = (function(){
         } else {
             BrightJs.prototype[a] = b;
         }
+    }
+
+    function setOptions (o) {
+        Object.assign(__options__, o);
     }
 
     function custom (a, b) {
@@ -33,22 +44,24 @@ const brightJs = (function(){
 
     function getAfter (i) {
         let next = i.nextSibling;
-        while(next?.nodeType != 1) {
-            next = next.nextSibling
+        while(next.nodeType !== 1) {
+            next = next.nextSibling;
+            if (!next) {
+                return null;
+            }
         }
         return next;
     }
 
     function getBefore (i) {
         let next = i.previousSibling;
-        while(next?.nodeType != 1) {
-            next = next.previousSibling
+        while(next.nodeType !== 1) {
+            next = next.previousSibling;
+            if (!next) {
+                return null;
+            }
         }
         return next;
-    }
-
-    function isList (i) {
-        return HTMLCollection.prototype.isPrototypeOf(i) || NodeList.prototype.isPrototypeOf(i);
     }
 
     function setProp (obj, path, val) {
@@ -79,81 +92,46 @@ const brightJs = (function(){
         }
     }
 
-    window.addEventListener('load', () => brightJs.ready = true);
-
-    const proto = { custom, extend, ready: false, parseHTML, ...console };
-    
     class BrightJs {
         constructor (...args) {
-            this.elements = args.map(i => typeof i === 'string' ? document.querySelectorAll(i) : i?.isBrightJs ? i?.elements : i);
-            this.clean();
-            this.length = this.elements.length;
+            this.elements = args.filter(Boolean).map(i => i.isBrightJs ? i.raw() : Array.from(typeof i === 'string' ? __options__.queryRoot[__options__.queryFunction](i) : i)).flat().filter(Boolean);
+            this.fragments = [];
             this.isBrightJs = true;
+            this.length = this.elements.length;
+            this.heavy = false;
         }
 
-        /* util functions */
         apply (args, obj) {
-            return this.each(i => {
+            return this.each((i, c) => {
                 args.forEach(j => {
                     if (typeof j === 'string') {
-                        obj?.isString(i, j)
+                        obj.isString(i, j, c);
                     } else if (j.isBrightJs) {
-                        obj?.isBrightJs(i, j);
+                        obj.isBrightJs(i, j, c);
                     } else {
-                        obj?.default(i, j);
+                        obj.default(i, j, c);
                     }
                 });
             });
         }
 
-        clean () {
-            this.elements = this.elements.filter(Boolean);
+        each (fn) {
+            this.elements.forEach(fn);
             return this;
         }
 
-        each (f) {
-            this.elements.forEach(i => {
-                if (isList(i)) {
-                    for (const j of i) f(j);
-                } else {
-                    f(i);
-                }
-            });
-            return this;
+        filter (fn) {
+            return this.elements.filter(fn);
         }
 
-        filter (f) {
-            const r = [];
-            this.elements.forEach(i => {
-                if (isList(i)) {
-                    for (const j of i) {
-                        if (f(j)) r.push(j);
-                    }
-                } else {
-                    if (f(i)) r.push(i);
-                }
-            });
-            return r;
+        map (fn) {
+            return this.elements.map(fn);
         }
 
-        map (f) {
-            const r = [];
-            this.elements.forEach(i => {
-                if (isList(i)) {
-                    for (const j of i) {
-                        r.push(f(j));
-                    }
-                } else {
-                    r.push(f(i));
-                }
-            });
-            return r;
+        return (arr) {
+            return this.length === 1 ? arr[0] : arr;
         }
-
-        return (a) {
-            return this.length === 1 ? a[0] : a;
-        }
-
+        
         /* prototype */
         addClass() {
             return this.each(i => i.classList.add(...arguments));
@@ -161,25 +139,33 @@ const brightJs = (function(){
 
         after (...args) {
             return args.length === 0 ? this.return(this.map(getAfter)) : this.apply(args, {
-                isString: (i, j) => i.after(...parseHTML(j).raw()),
+                isString: (i, j) => i.after(...parseHTML(j)),
                 isBrightJs: (i, j) => i.after(...j.raw()),
                 default: (i, j) => i.after(j)
             });
         }
 
         append (...args) {
+            var c = __options__.cloneWhenAppend;
+            if (this.heavy) {
+                return this.apply(args, {
+                    isString: (_, j, c) => this.fragments[c].appendChild(...parseHTML(j)),
+                    isBrightJs: (i, j, c) => i.append(...(c ? j.clone().raw() : j.raw())),
+                    default: (_, j, c) => this.fragments[c].appendChild(j)
+                });
+            }
             return this.apply(args, {
-                isString: (i, j) => i.lastChild.textContent += j,
-                isBrightJs: (i, j) => i.append(...j.raw()),
+                isString: (i, j) => i.appendChild(...parseHTML(j)),
+                isBrightJs: (i, j) => i.appendChild(...(c ? j.clone().raw() : j.raw())),
                 default: (i, j) => i.appendChild(j)
-            })
+            });
         }
 
         appendTo(...args) {
             return this.apply(args, {
                 isString: (i, j) => new BrightJs(j).append(i),
                 isBrightJs: (i, j) => j.append(i),
-                default: (i, j) => new BrightJs(j).append(i)
+                default: (i, j) => j.appendChild(i)
             });
         }
 
@@ -211,16 +197,16 @@ const brightJs = (function(){
         }
 
         click () {
-            return this.each(i => i?.click());
+            return this.each(i => i.click());
         }
 
         clone () {
-            this.clean();
-            return new BrightJs(...this.raw().map(i => i?.cloneNode(true)));
+            return new BrightJs(this.map(i => i.cloneNode(true)));
+            
         }
 
         closest(e) {
-            return this.return(this.map(i => new BrightJs(i?.closest(e))));
+            return this.return(this.map(i => new BrightJs(i.closest(e))));
         }
 
         css (prop, val) {
@@ -228,10 +214,10 @@ const brightJs = (function(){
                 if (typeof prop !== 'object') {
                     return this.each(i => i.style[prop] = val);
                 } else {
-                    return this.each(i => Object.assign(i?.style, prop));
+                    return this.each(i => Object.assign(i.style, prop));
                 }
             }
-            return this.return(this.map(i => i?.style[prop]));
+            return this.return(this.map(i => i.style[prop]));
         }
 
         delay (ms) {
@@ -283,16 +269,16 @@ const brightJs = (function(){
         }
 
         html (...args) {
-            return args.length > 0 ? this.each(i => i.innerHTML = args.join(' ')) : this.return(this.map(i => i?.innerHTML));
+            return args.length > 0 ? this.each(i => i.innerHTML = args.join(' ')) : this.return(this.map(i => i.innerHTML));
         }
 
         lastChild () {
-            return new BrightJs(...this.map(i => i?.lastElementChild));
+            return new BrightJs(...this.map(i => i.lastElementChild));
         }
 
         async load (p) {
             const res = await fetch(p);
-            const body = await res?.text();
+            const body = await res.text();
             this.each(i => i.innerHTML = body);
             return res;
         }
@@ -302,24 +288,37 @@ const brightJs = (function(){
         }
 
         parent () {
-            return this.return(this.map(i => i?.parentElement));
+            return this.return(this.map(i => i.parentElement));
         }
 
         raw () {
-            this.clean();
             return this.map(i => i);
         }
 
         remove () {
-            return this.each(i => i?.remove());
+            return this.each(i => i.remove());
         }
 
         removeClass () {
-            return this.each(i => i?.classList?.remove(...arguments));
+            return this.each(i => i.classList.remove(...arguments));
         }
 
         removeEvent (...args) {
             return this.each(i => i.removeEventListener(...args));
+        }
+
+        render () {
+            if (!this.heavy) {
+                return this;
+            }
+            this.heavy = false;
+            return this.each((i, j) => i.appendChild(this.fragments[j]));
+        }
+
+        setHeavy () {
+            this.fragments = [...Array(this.length)].map(() => document.createDocumentFragment());
+            this.heavy = true;
+            return this;
         }
 
         scrollTo (x, y, b = 'smooth') {
@@ -355,7 +354,7 @@ const brightJs = (function(){
         }
 
         text(...args) {
-            return args.length > 0 ? this.each(i => i.textContent = args.join(' ')) : this.return(this.map(i => i?.textContent));
+            return args.length > 0 ? this.each(i => i.textContent = args.join(' ')) : this.return(this.map(i => i.textContent));
         }
 
         toogleAttr (n, f) {
@@ -363,7 +362,7 @@ const brightJs = (function(){
         }
 
         toogleClass(c, f) {
-            return this.each(i => i?.classList?.toggle(c, f));
+            return this.each(i => i.classList.toggle(c, f));
         }
 
         trigger (...args) {
@@ -372,6 +371,10 @@ const brightJs = (function(){
                 this.each(j => j.dispatchEvent(e));
             });
             return this;
+        }
+
+        update (n) {
+            return this.each(i => Object.assign(i, n));
         }
 
         val (v) {
@@ -383,22 +386,16 @@ const brightJs = (function(){
         }       
 
         *[Symbol.iterator]() {
-            this.clean();
             for (const i of this.elements) {
-                if (isList(i)) {
-                    for (const j of i) {
-                        yield new BrightJs(j);
-                    }
-                } else {
-                    yield new BrightJs(i);
-                }
+                yield new BrightJs(i);
             }
         }
     }
 
-    return Object.assign((...args) => new BrightJs(...args), proto);
+    return Object.assign((...args) => new BrightJs(...args), __custom__);
 })();
 
+brightJs.custom(console);
 brightJs.custom({
     noConflict: () => $ = undefined,
     getJSON: (p) => fetch(p).then(r => r.json()),
