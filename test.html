@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test for Bright.js</title>
+        <script src="./code/index.js"></script>
+    </head>
+
+    <body>
+        <h1>This is my div.</h1>
+        <button>test</button>
+        <div>Hi</div>
+    </body>
+
+    <script>
+    /*console.time('h1');
+    const h1 = $('h1');
+    console.timeEnd('h1');
+
+    console.time('button');
+    const button = $('button');
+    console.timeEnd('button');
+
+    console.time('all')
+    const all = $(h1, button);
+    console.timeEnd('all');
+
+    console.time('native');
+    const button2 = document.querySelectorAll('button');
+    console.timeEnd('native');
+
+    console.time('semi');
+    const button3 = $(document.querySelectorAll('button'));
+    console.timeEnd('semi');
+    
+
+    console.time('bunch');
+    const bunch = $(h1, button2, 'div', h1.raw());
+    console.timeEnd('bunch');*/
+
+    /*const c = document.createDocumentFragment();
+    for (var i = 1; i <= 10000; i++) {
+        var li = document.createElement('li');
+        li.innerHTML = i;
+        c.appendChild(li);
+    }
+    document.querySelector('ul').appendChild(c);*/
+
+    // const ul = $('ul');
+    // ul.setHeavy();
+    /*for (var i = 1; i <= 10000; i++) {
+        ul.append('<li>' + i + '</li>');
+    }*/
+    // ul.render();
+    const h1 = $('h1');
+    const win = $(window);
+    const doc = $(document);
+
+    h1.html('lol');
+
+    console.log(h1.elements);
+    console.log(win.elements);
+    console.log(doc.elements);
+
+    
+    // doc.set('title', 'Hello world!');
+
+    </script>
+</html>

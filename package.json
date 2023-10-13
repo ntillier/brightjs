@@ -1,0 +1,26 @@
+{
+  "devDependencies": {
+    "esbuild": "0.19.4"
+  },
+  "name": "brightjs",
+  "version": "2.0.0-alpha",
+  "main": "lib/bright.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bright-js/brightjs.git"
+  },
+  "author": "Nathan TILLIER",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bright-js/brightjs/issues"
+  },
+  "homepage": "https://github.com/bright-js/brightjs#readme",
+  "description": ""
+}
