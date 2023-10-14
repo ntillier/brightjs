@@ -1,7 +1,6 @@
 
 import { toArray } from './operations';
-import { NodeElement } from './types';
-import { isElement } from './validators';
+import { getType } from './validators';
 
 // if the caracter is in the range [0-9A-Za-z]
 const isValidAscii = (code: number): boolean => (code > 47 && code < 58) || (code > 64 && code < 91) || (code > 96 && code < 123) || code === 45 || code === 95;
@@ -37,12 +36,13 @@ export default function getElements(...args: any[]) {
 
   for (let i = 0; i < args.length; i++) {
     let current = args[i];
+    let type = getType(current);
 
-    if (typeof current === 'string') {
+    if (type === 'string') {
       nodes.push(...HTMLTagsSelector(document, current));
-    } else if (current.constructor.name === "BrightJs") {
+    } else if (type === 'bright') {
       nodes.push(...current.nodes);
-    } else if (isElement(current) || current === document || current === window) {
+    } else if (type === 'element') {
       nodes.push(current);
     } else {
       console.log('Unknown argument:', current);

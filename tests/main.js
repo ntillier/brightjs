@@ -33,7 +33,6 @@ $.ready(() => {
 
   const body = $(document.body);
 
-  paragraphs.after('After');
-  paragraphs.after($('header'));
+  paragraphs.append('<h1>Append</h1>', '<h2>Append 2</h2>');
 
 });

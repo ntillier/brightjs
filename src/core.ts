@@ -1,24 +1,26 @@
 import getIndex from "./extensions";
 import after from "./extensions/after";
+import append from "./extensions/append";
 import { children, firstChild, hasChild, lastChild } from "./extensions/children";
 import { addClass, hasClass, removeClass } from "./extensions/class";
+import clone from "./extensions/clone";
 import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
 import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
 import setId from "./extensions/id";
 import setInnerText from "./extensions/text";
+import { copyArray } from "./utils/operations";
 import getElements from "./utils/selector";
 import { NodeElement } from "./utils/types";
 
 function BrightJs (...queries: any[]) {
     this.nodes = getElements(...queries);
+    this.fragment = null;
 }
 
 BrightJs.prototype.each = function (fn: (node: NodeElement) => void) {
-    for (let i = 0; i < this.nodes.length; i++) {
-        fn(this.nodes[i]);
-    }
+    copyArray(fn, this.nodes);
     return this;
 }
 
@@ -28,14 +30,27 @@ BrightJs.prototype.list = function (fn: (node: NodeElement) => any) {
     }
 
     let values: any[] = [];
-    for (let i = 0; i < this.nodes.length; i++) {
-        values.push(fn(this.nodes[i]));
-    }
+    copyArray(values.push, this.nodes);
     return values;
 }
 
 BrightJs.prototype.herit = function () {
     return new BrightJs(...arguments);
+}
+
+BrightJs.prototype.delayRender = function () {
+    if (!this.fragment) {
+        this.fragment = document.createDocumentFragment();
+    }
+}
+
+BrightJs.prototype.render = function () {
+    if (this.fragment) {
+        // @ts-expect-error
+        this.each((node: NodeElement) => node.appendChild(this.fragment.cloneNode(true)));
+        this.fragment = null;
+        return this;
+    }
 }
 
 BrightJs.prototype.css = css;
@@ -53,5 +68,7 @@ BrightJs.prototype.firstChild = firstChild;
 BrightJs.prototype.lastChild = lastChild;
 BrightJs.prototype.children = children;
 BrightJs.prototype.after = after;
+BrightJs.prototype.clone = clone;
+BrightJs.prototype.append = append;
 
 export default BrightJs;

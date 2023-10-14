@@ -1,6 +1,6 @@
 import { parseHTML } from "../utils/operations";
 import { NodeElement } from "../utils/types";
-import { isElement } from "../utils/validators";
+import { getType, isElement } from "../utils/validators";
 
 export default function after (arg: any) {
   if (!arg) {
@@ -19,10 +19,12 @@ export default function after (arg: any) {
     }));
   }
 
-  if (typeof arg === 'string') {
+  const type = getType(arg);
+
+  if (type === 'string') {
     // @ts-expect-error
     this.each((node: NodeElement) => node.after(...parseHTML(arg)));
-  } else if (arg.constructor.name === 'BrightJs') {
+  } else if (type === 'bright') {
     // @ts-expect-error
     this.each((node: NodeElement) => node.after(...arg.nodes));
   } else {
