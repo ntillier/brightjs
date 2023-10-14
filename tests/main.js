@@ -1,7 +1,7 @@
 window.$ = brightJs;
 
 $.ready(() => {
-  console.log('Ready.');
+  console.log('Document ready.');
   
   const header = $("header").css('color', 'red');
 
