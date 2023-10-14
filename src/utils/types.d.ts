@@ -1,0 +1,1 @@
+export type NodeElement = HTMLElement | Document | Window;

@@ -9,7 +9,14 @@ export default [
     plugins: [
       swc({
         minify: true,
-        include: 'src/**/*.ts'
+        include: 'src/**/*.ts',
+        jsc: {
+          minify: {
+            mangle: {
+              reserved: ['BrightJs']
+            }
+          }
+        }
       })
     ],
     output: {
