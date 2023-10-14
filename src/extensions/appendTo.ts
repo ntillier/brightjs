@@ -4,8 +4,6 @@ import { getType } from "../utils/validators";
 
 
 export default function appendTo (...args: any[]) {
-  console.log('appendTo')
-
   copyArray((arg) => {
     const type = getType(arg);
 
