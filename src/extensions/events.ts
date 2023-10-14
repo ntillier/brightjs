@@ -6,6 +6,10 @@ export default function onEvent (name: string, fn: any) {
   });
 }
 
+export function removeEvent (name: string, fn: any, opts: any) {
+  return this.each((node: NodeElement) => node.removeEventListener(name, fn, opts));
+}
+
 export function blur () {
   // @ts-expect-error
   return this.each((node: NodeElement) => node.blur());

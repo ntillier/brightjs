@@ -4,10 +4,11 @@ import append from "./extensions/append";
 import appendTo from "./extensions/appendTo";
 import setAttribute from "./extensions/attr";
 import { children, firstChild, hasChild, lastChild } from "./extensions/children";
-import { addClass, hasClass, removeClass } from "./extensions/class";
+import { addClass, hasClass, removeClass, toogleClass } from "./extensions/class";
 import clone from "./extensions/clone";
+import { closest, find, findOne, parent } from "./extensions/find";
 import { css } from "./extensions/css";
-import onEvent, { click } from "./extensions/events";
+import onEvent, { click, removeEvent } from "./extensions/events";
 import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
 import setId from "./extensions/id";
@@ -15,6 +16,10 @@ import setInnerText from "./extensions/text";
 import { copyArray } from "./utils/operations";
 import getElements from "./utils/selector";
 import { NodeElement } from "./utils/types";
+import load from "./extensions/load";
+import { height, position, width } from "./extensions/size";
+import { scrollBottom, scrollLeft, scrollRight, scrollTo, scrollTop } from "./extensions/scroll";
+import { setValue } from "./extensions/val";
 
 function BrightJs (...queries: any[]) {
     this.nodes = getElements(...queries);
@@ -55,14 +60,23 @@ BrightJs.prototype.render = function () {
     }
 }
 
+BrightJs.prototype.remove = function () {
+    // @ts-expect-error
+    this.each((node: NodeElement) => node.remove());
+    this.nodes = [];
+    return this;
+}
+
 BrightJs.prototype.css = css;
 BrightJs.prototype.on = onEvent;
+BrightJs.prototype.removeEvent = removeEvent;
 BrightJs.prototype.html = setInnerHTML;
 BrightJs.prototype.text = setInnerText;
 BrightJs.prototype.filter = filter;
 BrightJs.prototype.addClass = addClass;
 BrightJs.prototype.removeClass = removeClass;
 BrightJs.prototype.hasClass = hasClass;
+BrightJs.prototype.toogleClass = toogleClass;
 BrightJs.prototype.id = setId;
 BrightJs.prototype.index = getIndex;
 BrightJs.prototype.hasChild = hasChild;
@@ -77,5 +91,19 @@ BrightJs.prototype.attr = setAttribute;
 BrightJs.prototype.click = click;
 BrightJs.prototype.blur = blur;
 BrightJs.prototype.focus = focus;
+BrightJs.prototype.closest = closest;
+BrightJs.prototype.find = find;
+BrightJs.prototype.findOne = findOne;
+BrightJs.prototype.parent = parent;
+BrightJs.prototype.load = load;
+BrightJs.prototype.position = position;
+BrightJs.prototype.height = height;
+BrightJs.prototype.width = width;
+BrightJs.prototype.scrollTo = scrollTo;
+BrightJs.prototype.scrollTop = scrollTop;
+BrightJs.prototype.scrollBottom = scrollBottom;
+BrightJs.prototype.scrollRight = scrollRight;
+BrightJs.prototype.scrollLeft = scrollLeft;
+BrightJs.prototype.val = setValue;
 
 export default BrightJs;
