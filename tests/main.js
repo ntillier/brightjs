@@ -31,6 +31,15 @@ $.ready(() => {
     })
     .css('background', 'yellow');
 
+  console.log($('#resume').index());
+
+  const body = $(document.body);
+
+  console.log(body.firstChild());
+  console.log(body.lastChild());
+  console.log(body.children())
+  console.log(body.children(1))
+
   $(document.getElementById('resume'))
     .css({
       background: 'blue',

@@ -1,3 +1,5 @@
+import getIndex from "./extensions";
+import { children, firstChild, hasChild, lastChild } from "./extensions/children";
 import { addClass, hasClass, removeClass } from "./extensions/class";
 import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
@@ -45,6 +47,10 @@ BrightJs.prototype.list = function (fn: (node: NodeElement) => any) {
     return values;
 }
 
+BrightJs.prototype.herit = function () {
+    return new BrightJs(...arguments);
+}
+
 BrightJs.prototype.css = css;
 BrightJs.prototype.on = onEvent;
 BrightJs.prototype.html = setInnerHTML;
@@ -54,5 +60,10 @@ BrightJs.prototype.addClass = addClass;
 BrightJs.prototype.removeClass = removeClass;
 BrightJs.prototype.hasClass = hasClass;
 BrightJs.prototype.id = setId;
+BrightJs.prototype.index = getIndex;
+BrightJs.prototype.hasChild = hasChild;
+BrightJs.prototype.firstChild = firstChild;
+BrightJs.prototype.lastChild = lastChild;
+BrightJs.prototype.children = children;
 
 export default BrightJs;
