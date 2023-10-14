@@ -12,6 +12,7 @@ $.ready(() => {
   $(".paragraph");
 
   $("#summary")
+    .text("A small summary...")
     .on('click', () => {
       alert('Clicked.');
     })
