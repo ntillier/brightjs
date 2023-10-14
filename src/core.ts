@@ -1,4 +1,5 @@
 import getIndex from "./extensions";
+import after from "./extensions/after";
 import { children, firstChild, hasChild, lastChild } from "./extensions/children";
 import { addClass, hasClass, removeClass } from "./extensions/class";
 import { css } from "./extensions/css";
@@ -7,25 +8,11 @@ import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
 import setId from "./extensions/id";
 import setInnerText from "./extensions/text";
-import { HTMLTagsSelector } from "./utils/selector";
+import getElements from "./utils/selector";
 import { NodeElement } from "./utils/types";
-import { isElement } from "./utils/validators";
 
-function BrightJs (...queries: (string | NodeElement | typeof BrightJs)[]) {
-    this.nodes = [];
-    
-    for (let i = 0; i < queries.length; i++) {
-        let current = queries[i];
-
-        if (typeof current === 'string') {
-            this.nodes.push(...HTMLTagsSelector(document, current));
-        } else if (BrightJs.prototype.isPrototypeOf(current)) {
-            // @ts-expect-error
-            this.nodes.push(...current.nodes);
-        } else if (isElement(current) || current === document || current === window) {
-            this.nodes.push(current);
-        }
-    }
+function BrightJs (...queries: any[]) {
+    this.nodes = getElements(...queries);
 }
 
 BrightJs.prototype.each = function (fn: (node: NodeElement) => void) {
@@ -65,5 +52,6 @@ BrightJs.prototype.hasChild = hasChild;
 BrightJs.prototype.firstChild = firstChild;
 BrightJs.prototype.lastChild = lastChild;
 BrightJs.prototype.children = children;
+BrightJs.prototype.after = after;
 
 export default BrightJs;
