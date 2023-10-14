@@ -5,17 +5,8 @@ const BrightJs = function (query: string) {
 }
 
 BrightJs.prototype.extend = function (name: string, fn: () => void) {
-    BrightJs.prototype[name] = function () {
-        fn.call(this, ...arguments);
-        return this;
-    }
-
+    BrightJs.prototype[name] = fn;
     return this;
-}
-
-BrightJs.prototype.freeze = function () {
-    Object.freeze(BrightJs.prototype);
-
 }
 
 export default BrightJs;

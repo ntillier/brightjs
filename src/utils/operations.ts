@@ -1,2 +1,2 @@
 
-export const toArray = (value: any): any[] => Array.from(value);
+export const toArray = (value: any): Array<any> => Array.from(value);

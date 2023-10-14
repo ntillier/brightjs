@@ -2,12 +2,16 @@
 import { toArray } from './operations';
 
 // if the caracter is in the range [0-9A-Za-z]
-const isValidAscii = (code: number) => (code > 47 && code < 58) || (code > 64 && code < 91) || (code > 96 && code < 123);
+const isValidAscii = (code: number): boolean => (code > 47 && code < 58) || (code > 64 && code < 91) || (code > 96 && code < 123);
 
-export const HTMLTagsSelector = (root: Document | HTMLElement, query: string) => {
+export const HTMLTagsSelector = (root: Document | HTMLElement, query: string): Array<any> => {
 
   // We trim the query
   query = query.trim();
+
+  /*if (query.length === 0) {
+    return [];
+  }*/
 
   // We verify that each character is a valid character
   for (let i = 1; i < query.length; i++) {

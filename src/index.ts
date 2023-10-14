@@ -1,3 +1,4 @@
+
 import brightJs from "./core";
 
-export { brightJs, brightJs as $ };
+export default brightJs;
