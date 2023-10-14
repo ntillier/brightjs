@@ -1,5 +1,6 @@
 import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
+import setInnerHTML from "./extensions/html";
 import { HTMLTagsSelector } from "./utils/selector";
 import { NodeElement } from "./utils/types";
 import { isElement } from "./utils/validators";
@@ -42,5 +43,6 @@ BrightJs.prototype.list = function (fn: (node: NodeElement) => any) {
 
 BrightJs.prototype.css = css;
 BrightJs.prototype.on = onEvent;
+BrightJs.prototype.html = setInnerHTML;
 
 export default BrightJs;
