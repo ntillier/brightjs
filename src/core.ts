@@ -3,6 +3,7 @@ import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
 import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
+import setId from "./extensions/id";
 import setInnerText from "./extensions/text";
 import { HTMLTagsSelector } from "./utils/selector";
 import { NodeElement } from "./utils/types";
@@ -52,5 +53,6 @@ BrightJs.prototype.filter = filter;
 BrightJs.prototype.addClass = addClass;
 BrightJs.prototype.removeClass = removeClass;
 BrightJs.prototype.hasClass = hasClass;
+BrightJs.prototype.id = setId;
 
 export default BrightJs;

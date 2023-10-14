@@ -15,6 +15,7 @@ $.ready(() => {
       'text-decoration': 'none'
     })
     .filter((node) => node.hash === '#summary')
+    .id('summary-link')
     .css('background', 'yellow');
 
   $(document.body).css('font-family', 'sans-serif');
