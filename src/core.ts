@@ -7,7 +7,7 @@ import { children, firstChild, hasChild, lastChild } from "./extensions/children
 import { addClass, hasClass, removeClass } from "./extensions/class";
 import clone from "./extensions/clone";
 import { css } from "./extensions/css";
-import onEvent from "./extensions/events";
+import onEvent, { click } from "./extensions/events";
 import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
 import setId from "./extensions/id";
@@ -74,5 +74,8 @@ BrightJs.prototype.clone = clone;
 BrightJs.prototype.append = append;
 BrightJs.prototype.appendTo = appendTo;
 BrightJs.prototype.attr = setAttribute;
+BrightJs.prototype.click = click;
+BrightJs.prototype.blur = blur;
+BrightJs.prototype.focus = focus;
 
 export default BrightJs;
