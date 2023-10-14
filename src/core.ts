@@ -2,6 +2,7 @@ import getIndex from "./extensions";
 import after from "./extensions/after";
 import append from "./extensions/append";
 import appendTo from "./extensions/appendTo";
+import setAttribute from "./extensions/attr";
 import { children, firstChild, hasChild, lastChild } from "./extensions/children";
 import { addClass, hasClass, removeClass } from "./extensions/class";
 import clone from "./extensions/clone";
@@ -72,5 +73,6 @@ BrightJs.prototype.after = after;
 BrightJs.prototype.clone = clone;
 BrightJs.prototype.append = append;
 BrightJs.prototype.appendTo = appendTo;
+BrightJs.prototype.attr = setAttribute;
 
 export default BrightJs;
