@@ -1,5 +1,6 @@
 import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
+import filter from "./extensions/filter";
 import setInnerHTML from "./extensions/html";
 import setInnerText from "./extensions/text";
 import { HTMLTagsSelector } from "./utils/selector";
@@ -46,5 +47,6 @@ BrightJs.prototype.css = css;
 BrightJs.prototype.on = onEvent;
 BrightJs.prototype.html = setInnerHTML;
 BrightJs.prototype.text = setInnerText;
+BrightJs.prototype.filter = filter;
 
 export default BrightJs;
