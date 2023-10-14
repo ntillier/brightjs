@@ -1,3 +1,4 @@
+import { addClass, hasClass, removeClass } from "./extensions/class";
 import { css } from "./extensions/css";
 import onEvent from "./extensions/events";
 import filter from "./extensions/filter";
@@ -48,5 +49,8 @@ BrightJs.prototype.on = onEvent;
 BrightJs.prototype.html = setInnerHTML;
 BrightJs.prototype.text = setInnerText;
 BrightJs.prototype.filter = filter;
+BrightJs.prototype.addClass = addClass;
+BrightJs.prototype.removeClass = removeClass;
+BrightJs.prototype.hasClass = hasClass;
 
 export default BrightJs;

@@ -19,7 +19,9 @@ $.ready(() => {
 
   $(document.body).css('font-family', 'sans-serif');
 
-  $(".paragraph");
+  const paragraphs = $(".paragraph")
+    .addClass('content')
+    .removeClass('paragraph');
 
   $("#summary")
     .text("A small summary...")
