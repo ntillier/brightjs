@@ -4,25 +4,15 @@ import { getType } from "../utils/validators";
 
 
 export default function appendTo (...args: any[]) {
-  const fragment = document.createDocumentFragment();
+  console.log('appendTo')
 
   copyArray((arg) => {
     const type = getType(arg);
 
-    if (type === 'string') {
-      copyArray(fragment.appendChild.bind(fragment), parseHTML(arg));
-    } else if (type === 'bright') {
-      copyArray(fragment.appendChild.bind(fragment), arg.nodes);
+    if (type === 'bright') {
+      arg.append(this);
     } else if (type === 'element') {
-      fragment.appendChild(arg);
+      copyArray(arg.appendChild.bind(arg), this.nodes);
     }
   }, args);
-
-  if (this.fragment) {
-    this.fragment.appendChild(fragment);
-    return this;
-  }
-
-  // @ts-expect-error
-  return this.each((node: NodeElement) => node.appendChild(fragment.cloneNode(true)));
 }

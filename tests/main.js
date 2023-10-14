@@ -33,6 +33,8 @@ $.ready(() => {
 
   const body = $(document.body);
 
-  paragraphs.append('<h1>Append</h1>', '<h2>Append 2</h2>');
+  paragraphs.clone().appendTo(body);
+
+  paragraphs.append('<h1>Append</h1>', '<h2>Append 2</h2>', $('header'));
 
 });

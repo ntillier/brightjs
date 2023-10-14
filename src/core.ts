@@ -1,6 +1,7 @@
 import getIndex from "./extensions";
 import after from "./extensions/after";
 import append from "./extensions/append";
+import appendTo from "./extensions/appendTo";
 import { children, firstChild, hasChild, lastChild } from "./extensions/children";
 import { addClass, hasClass, removeClass } from "./extensions/class";
 import clone from "./extensions/clone";
@@ -24,13 +25,13 @@ BrightJs.prototype.each = function (fn: (node: NodeElement) => void) {
     return this;
 }
 
-BrightJs.prototype.list = function (fn: (node: NodeElement) => any) {
-    if (this.nodes.length === 1) {
+BrightJs.prototype.list = function (fn: (node: NodeElement) => any, forceArray?: boolean) {
+    if (this.nodes.length === 1 && !forceArray) {
         return fn(this.nodes[0]);
     }
 
     let values: any[] = [];
-    copyArray(values.push, this.nodes);
+    copyArray((item) => values.push(fn(item)), this.nodes);
     return values;
 }
 
@@ -70,5 +71,6 @@ BrightJs.prototype.children = children;
 BrightJs.prototype.after = after;
 BrightJs.prototype.clone = clone;
 BrightJs.prototype.append = append;
+BrightJs.prototype.appendTo = appendTo;
 
 export default BrightJs;

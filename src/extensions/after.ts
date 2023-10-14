@@ -16,7 +16,7 @@ export default function after (arg: any) {
           }
       }
       return next;
-    }));
+    }), true);
   }
 
   const type = getType(arg);

@@ -12,9 +12,10 @@ export const isElement = (value: any) =>  (
 export const getType = (arg: any): 'string' | 'bright' | 'element' | undefined => {
   if (typeof arg === 'string') {
     return 'string';
-  } else if (arg.constructor.name === "BrightJs") {
+  } else if (arg?.constructor?.name === "BrightJs") {
     return 'bright';
   } else if (isElement(arg) || arg === document || arg === window) {
     return 'element';
   }
+  console.trace('type not found');
 }

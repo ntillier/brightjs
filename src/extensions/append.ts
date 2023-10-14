@@ -12,7 +12,7 @@ export default function append (...args: any[]) {
     if (type === 'string') {
       copyArray(fragment.appendChild.bind(fragment), parseHTML(arg));
     } else if (type === 'bright') {
-      copyArray(fragment.appendChild.bind(fragment), arg.nodes);
+      copyArray(fragment.appendChild.bind(fragment), arg.clone().nodes);
     } else if (type === 'element') {
       fragment.appendChild(arg);
     }

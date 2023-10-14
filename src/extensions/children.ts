@@ -18,7 +18,7 @@ export function firstChild () {
 export function children (index: number) {
   if (index) {
     // @ts-expect-error
-    return this.herit(this.list((node: NodeElement) => node.children.item(index)));
+    return this.herit(...this.list((node: NodeElement) => node.children.item(index), true));
   }
 
   // @ts-expect-error
